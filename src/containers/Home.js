@@ -22,21 +22,32 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
-    if(!auth.getUserFromStore) {
+    auth.getUserFromStore().then(user => {
+      console.log(user)
+    }).catch(e => {
+      Toast.show({
+        message: 'Sorry, you are not logged in',
+        position: 'bottom',
+        buttonText: 'Okay'
+      });
       this.props.navigation.navigate('Login')
-    } else {
-      if(!auth.getBundleFromStore) {
-        initData().then(response => {
-          storage.set('bundle', response.configuration);
-        }).catch(e => {
-          this.props.navigation.navigate('UpdateStore');
-        })
-      }
-      this.setState({ user: storage.get('user') })
-    }
+    });
+    //  {
+    //   this.props.navigation.navigate('Login')
+    // } else {
+    //   if(!auth.getBundleFromStore) {
+    //     initData().then(response => {
+    //       storage.set('bundle', response.configuration);
+    //     }).catch(e => {
+    //       this.props.navigation.navigate('UpdateStore');
+    //     })
+    //   }
+    //   this.setState({ user: storage.get('user') })
+    // }
   }
 
   render() {
+    console.log(auth.getBundleFromStore())
     return (
       <Container>
         <Header />

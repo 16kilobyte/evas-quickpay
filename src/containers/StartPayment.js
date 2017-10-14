@@ -76,9 +76,9 @@ export default class StartPayment extends Component {
                 <Item label="Third Party Insurance" key="insurance" />
               </Picker>
             </Item>
-            { this.state.serviceType === 'taxPayer' && <TaxPayer /> }
-            { this.state.serviceType === 'vehicle' && <Vehicle /> }
-            { this.state.serviceType === 'insurance' && <Insurance /> }
+            { this.state.serviceType === 'taxPayer' && <TaxPayer  state={this.state} /> }
+            { this.state.serviceType === 'vehicle' && <Vehicle state={this.state} /> }
+            { this.state.serviceType === 'insurance' && <Insurance state={this.state} /> }
             <Button block success>
               <Text>Pay ₦{this.state.amount}</Text>
             </Button>

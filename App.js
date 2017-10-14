@@ -37,8 +37,8 @@ export default class App extends React.Component {
   }
 
   render() {
-    if(this.state.ready) return <Root><MainApp /></Root>;
-    return <View style={styles.container}><Loading /></View>
+    if(this.state.ready) return (<Root><MainApp /></Root>)
+    return (<View style={styles.container}><Loading /></View>)
   }
 }
 

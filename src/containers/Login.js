@@ -59,10 +59,10 @@ export default class Login extends Component {
         <Content>
           <Form>
             <Item>
-              <Input placeholder="Email" onChange={email => this.updateEmail(email)} />
+              <Input placeholder="Email" onChangeText={email => this.updateEmail(email)} />
             </Item>
             <Item>
-              <Input placeholder="Password" onChange={password => this.updatePassword(password)} />
+              <Input placeholder="Password" onChangeText={password => this.updatePassword(password)} />
             </Item>
             <Button block success onPress={() => this.login()}>
               <Text>Login</Text>
