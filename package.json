@@ -9,7 +9,7 @@
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
-    "start": "react-native-scripts start",
+    "start": "sudo sysctl -w fs.inotify.max_user_instances=1024 && sudo sysctl -w fs.inotify.max_user_watches=12288 && react-native-scripts start",
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
@@ -22,6 +22,7 @@
     "expo": "^21.0.0",
     "native-base": "^2.3.2",
     "react": "16.0.0-alpha.12",
-    "react-native": "^0.48.4"
+    "react-native": "^0.48.4",
+    "react-navigation": "^1.0.0-beta.13"
   }
 }

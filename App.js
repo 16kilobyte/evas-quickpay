@@ -1,8 +1,22 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import { Container, Button, Text, Left, Icon, Body, Title, Right, Header, Content, Footer, FooterTab, Form, Item, Input } from 'native-base';
-import Expo from 'expo'
+import { Container, Header, Content, Spinner } from 'native-base';
+import Expo, { Constants } from 'expo';
+import { StackNavigator } from 'react-navigation';
 
+import Login from './src/containers/Login'
+import Home from './src/containers/Home'
+import StartPayment from './src/containers/StartPayment'
+import UpdateStore from './src/containers/UpdateStore'
+
+import Loading from './src/components/Loading'
+
+const MainApp = StackNavigator({
+  Login: { screen: Login },
+  Home: { screen: Home },
+  StartPayment: { screen: StartPayment },
+  UpdateStore: { screen: UpdateStore },
+}, { headerMode: 'none' });
 
 export default class App extends React.Component {
 
@@ -23,21 +37,8 @@ export default class App extends React.Component {
   }
 
   render() {
-    return (
-      <Container>
-        <Header />
-        <Content>
-          <Form>
-            <Item>
-              <Input placeholder="Username" />
-            </Item>
-            <Item last>
-              <Input placeholder="Password" />
-            </Item>
-          </Form>
-        </Content>
-      </Container>
-    );
+    if(this.state.ready) return <MainApp />;
+    return <View style={styles.container}><Loading /></View>
   }
 }
 
@@ -47,5 +48,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: Constants.statusBarHeight
   },
 });
