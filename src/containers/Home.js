@@ -22,10 +22,16 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
-    if(!auth.isLoggedIn) {
+    if(!auth.getUserFromStore) {
       this.props.navigation.navigate('Login')
     } else {
-      initData().then()
+      if(!auth.getBundleFromStore) {
+        initData().then(response => {
+          storage.set('bundle', response.configuration);
+        }).catch(e => {
+          this.props.navigation.navigate('UpdateStore');
+        })
+      }
       this.setState({ user: storage.get('user') })
     }
   }

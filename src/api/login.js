@@ -1,4 +1,5 @@
-import { urls } from '../config/urls';
+import { urls } from '../config';
+console.log(urls)
 
 export default function login(user) {
 	return new Promise(async (resolve, reject) => {
@@ -12,7 +13,11 @@ export default function login(user) {
 				body: JSON.stringify(user)
 			});
 			let responseJson = await response.json();
-			resolve(responseJson);
+			if(responseJson && responseJson.status && responseJson.status === 'success') {
+				resolve(responseJson);
+			} else {
+				reject(responseJson);
+			}
 		} catch (error) {
 			console.error(`Error thrown in api/login: ${error}`);
 			reject(error);

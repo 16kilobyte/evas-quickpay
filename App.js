@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import { Container, Header, Content, Spinner } from 'native-base';
+import { Root, Container, Header, Content, Spinner } from 'native-base';
 import Expo, { Constants } from 'expo';
 import { StackNavigator } from 'react-navigation';
 
@@ -37,7 +37,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    if(this.state.ready) return <MainApp />;
+    if(this.state.ready) return <Root><MainApp /></Root>;
     return <View style={styles.container}><Loading /></View>
   }
 }

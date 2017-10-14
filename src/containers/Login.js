@@ -28,25 +28,28 @@ export default class Login extends Component {
   }
 
   login() {
+    console.log(this.state);
     login(this.state).then(response => {
+      console.log(response);
       storage.set('user', response);
       this.props.navigation.navigate('Home')
     }).catch(e => {
       Toast.show({
         text: 'Wrong login credentials',
         position: 'bottom',
-        buttonText: 'Retry'
-      })
-      console.error('Login failed with the error', e)
-    })
+        buttonText: 'Okay'
+      });
+    });
   }
 
   updateEmail(email) {
     this.setState({ email })
+    console.log('updateEmail', this.state)
   }
 
   updatePassword(password) {
     this.setState({ password })
+    console.log('updatePassword', this.state)
   }
 
   render() {
@@ -59,9 +62,9 @@ export default class Login extends Component {
               <Input placeholder="Email" onChange={email => this.updateEmail(email)} />
             </Item>
             <Item>
-              <Input placeholder="Password" />
+              <Input placeholder="Password" onChange={password => this.updatePassword(password)} />
             </Item>
-            <Button block success>
+            <Button block success onPress={() => this.login()}>
               <Text>Login</Text>
             </Button>
           </Form>
