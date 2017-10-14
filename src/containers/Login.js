@@ -37,7 +37,9 @@ export default class Login extends Component {
       Toast.show({
         text: 'Wrong login credentials',
         position: 'bottom',
-        buttonText: 'Okay'
+        buttonText: 'Okay',
+        type: 'danger',
+        duration: 5000
       });
     });
   }

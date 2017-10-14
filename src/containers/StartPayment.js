@@ -32,11 +32,10 @@ export default class StartPayment extends Component {
   }
 
   componentDidMount() {
-    if(!auth.isLoggedIn) {
-      this.props.navigation.navigate('Login')
-    } else {
-      this.setState({ user: storage.get('user') })
-    }
+    // if(!this.props.user || this.props.bundle) {
+    //   this.props.navigation.navigate('Login')
+    // }
+    console.log(this.props.navigation.state.params)
   }
 
   updateState(newState = {}) {
@@ -53,6 +52,7 @@ export default class StartPayment extends Component {
   }
 
   render() {
+    const { bundle } = this.props
     return (
       <Container>
         <Header />
@@ -76,9 +76,19 @@ export default class StartPayment extends Component {
                 <Item label="Third Party Insurance" key="insurance" />
               </Picker>
             </Item>
-            { this.state.serviceType === 'taxPayer' && <TaxPayer  state={this.state} /> }
-            { this.state.serviceType === 'vehicle' && <Vehicle state={this.state} /> }
-            { this.state.serviceType === 'insurance' && <Insurance state={this.state} /> }
+            { this.state.serviceType === 'vehicle' &&
+              <Vehicle
+                state={this.state} updateState={(key, val) => this.updateState(key, val)}
+                vehicleTypes={bundle.vehicleTypes}
+                vehicleCategories={bundle.vehicleCategories}
+                vehicleServices={bundle.vehicleServices} /> }
+            { this.state.serviceType === 'insurance' &&
+              <Insurance
+                state={this.state}
+                updateState={(key, val) => this.updateState(key, val)}
+                vehicleTypes={bundle.vehicleTypes}
+                vehicleCategories={bundle.vehicleCategories}
+                insuranceServices={bundle.insuranceServices} /> }
             <Button block success>
               <Text>Pay ₦{this.state.amount}</Text>
             </Button>

@@ -36,6 +36,14 @@ export default class App extends React.Component {
     this.setState({ ready: true })
   }
 
+  showLoading() {
+    this.setState({ ready: false })
+  }
+
+  hideLoading() {
+    this.setState({ ready: true })
+  }
+
   render() {
     if(this.state.ready) return (<Root><MainApp /></Root>)
     return (<View style={styles.container}><Loading /></View>)
