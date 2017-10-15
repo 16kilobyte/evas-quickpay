@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { AsyncStorage } from 'react-native';
 import { Container, Header, Content, Form, Item, Input, Button, Text, Toast } from 'native-base';
 
 import login from '../api/login';
@@ -21,9 +22,14 @@ export default class Login extends Component {
     }
   }
 
-  componentDidMount() {
-    if(auth.isLoggedIn) {
-      this.props.navigation.navigate('Home')
+  async componentDidMount() {
+    try {
+      let user = await AsyncStorage.getItem('user');
+      if(user !== null) {
+        this.props.navigation.navigate('Home');
+      }
+    } catch(e) {
+      console.log('Login', e);
     }
   }
 
@@ -31,7 +37,7 @@ export default class Login extends Component {
     console.log(this.state);
     login(this.state).then(response => {
       console.log(response);
-      storage.set('user', response);
+      AsyncStorage.setItem('user', JSON.stringify(response));
       this.props.navigation.navigate('Home')
     }).catch(e => {
       Toast.show({

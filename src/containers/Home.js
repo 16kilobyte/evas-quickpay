@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { AsyncStorage } from 'react-native';
 import { Container, Header, Content, Form, Item, Input, Button, Text, Toast } from 'native-base';
 
 import login from '../api/login';
@@ -22,33 +23,46 @@ export default class Home extends Component {
     }
   }
 
-  componentDidMount() {
-    auth.getUserFromStore().then(user => {
-      console.log(user)
-      auth.getBundleFromStore().then(bundle => {
-        console.log(bundle)
-      }).catch(e => {
-        initData().then(bundle => {
-          if(bundle && bundle.status && bundle.status === 'success') {
-            storage.set('bundle', bundle.configuration)
-            this.setState({ bundle: bundle.configuration })
-            console.log(bundle)
-          } else {
-            Toast.show({
-              message: 'An error occurred during server interaction. Please, restart the app',
-              position: 'bottom',
-              type: 'danger',
-              buttonText: 'Okay',
-              onClose: () => (
-                this.props.navigation.navigate('Login')
-              )
-            })
-          }
-        })
-      })
-    }).catch(e => {
+  async componentDidMount() {
+    const { navigation } = this.props;
+    try {
+      let user = await AsyncStorage.getItem('user');
+      if(user !== null) {
+        user = JSON.parse(user)
+        console.log('user', user);
+        this.setState({ user });
+        let bundle = await AsyncStorage.getItem('bundle');
+        if(bundle !== null) {
+          bundle = JSON.parse(bundle)
+          console.log('bundle', bundle);
+          this.setState({ bundle });
+        } else {
+          initData().then(response => {
+            console.log('init', response);
+            if(response && response.status && response.status === 'success') {
+              AsyncStorage.setItem('bundle', JSON.stringify(response.configurations))
+              this.setState({ bundle: response.configurations })
+            } else {
+              Toast.show({
+                message: 'An error occurred during server interaction. Please, restart the app',
+                position: 'bottom',
+                type: 'danger',
+                buttonText: 'Okay',
+                onClose: () => (
+                  navigation.navigate('Login')
+                )
+              })
+            }
+          })
+        }
+      } else {
+        console.log('Not logged in')
+        navigation.navigate('Login');
+      }
+    } catch(e) {
+      console.log(`${e} in src/container/Home`);
       Toast.show({
-        message: 'Sorry, you are not logged in',
+        message: 'An unexpected error occured. Please, restart the app',
         position: 'bottom',
         buttonText: 'Login',
         type: 'danger',
@@ -57,7 +71,7 @@ export default class Home extends Component {
         }
       });
       this.props.navigation.navigate('Login')
-    });
+    }
   }
 
   render() {
