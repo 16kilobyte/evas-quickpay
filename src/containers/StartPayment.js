@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, AsyncStorage, Dimensions, StyleSheet, Image } from 'react-native';
 import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Picker, Icon } from 'native-base';
-import PiePayment from '../../../pie-react-native/index';
+import PiePayment from 'pie-react-native/index';
 
 import login from '../api/login';
 import * as storage from '../utils/storage';
@@ -94,7 +94,7 @@ export default class StartPayment extends Component {
   }
 
   callback(trxData) {
-
+    console.log('Start', trxData)
   }
 
   render() {
