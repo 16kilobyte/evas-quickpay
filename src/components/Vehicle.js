@@ -7,7 +7,7 @@ export default Vehicle = ({ vehicleTypes, vehicleCategories, vehicleServices, up
     <Picker
       onValueChange={vehicleType => updateState({ vehicleType })}
       iosHeader="Vehichle Type"
-      mode="dropdown"
+      mode="dialog"
       placeholder="Vehichle Type"
       selectedValue={state.vehicleType}>
         {vehicleTypes.map(vehicleType => (
@@ -17,7 +17,7 @@ export default Vehicle = ({ vehicleTypes, vehicleCategories, vehicleServices, up
     <Picker
       onValueChange={vehicleCategory => updateState({ vehicleCategory })}
       iosHeader="Vehicle Category"
-      mode="dropdown"
+      mode="dialog"
       placeholder="Vehicle Category"
       selectedValue={state.vehicleCategory}>
         {vehicleCategories.map(vehicleCategory => (
@@ -27,7 +27,7 @@ export default Vehicle = ({ vehicleTypes, vehicleCategories, vehicleServices, up
     <Picker
       onValueChange={serviceId => updateState({ serviceId })}
       iosHeader="Select Service"
-      mode="dropdown"
+      mode="dialog"
       placeholder="Select Service"
       selectedValue={state.serviceId}>
         {vehicleServices.map(vehicleService => (

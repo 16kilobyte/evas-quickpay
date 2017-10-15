@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
-import { AsyncStorage } from 'react-native';
-import { Container, Header, Content, Form, Item, Input, Button, Text, Toast } from 'native-base';
+import { View, StyleSheet, Image, Dimensions, AsyncStorage } from 'react-native';
+import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Icon } from 'native-base';
 
 import login from '../api/login';
 import initData from '../api/initData';
 import * as storage from '../utils/storage'
-import * as auth from '../utils/auth'
+import * as auth from '../utils/auth';
+import Colors from '../assets/literals/colors';
+import styles from '../assets/styles/common.js';
+
+const SCREEN = Dimensions.get('window');
 
 export default class Home extends Component {
   
@@ -78,14 +82,23 @@ export default class Home extends Component {
     console.log(auth.getBundleFromStore())
     return (
       <Container>
-        <Header />
         <Content>
-          <Button block success onPress={() => this.props.navigation.navigate('StartPayment', { bundle: this.state.bundle, user: this.state.user })}>
-            <Text>Start Payment</Text>
-          </Button>
-          <Button block danger onPress={() => this.props.navigation.navigate('UpdateStore')}>
-            <Text>Update</Text>
-          </Button>
+          <View style={[styles.container]}>
+            <Image source={require('../assets/images/displayLogo.png')} height={64} />
+            {this.state.working && <Spinner color={Colors.primaryColor} />}
+            <Button
+              block
+              iconRight
+              onPress={() => this.props.navigation.navigate('StartPayment', { bundle: this.state.bundle, user: this.state.user })}
+              style={[styles.primaryBtn, styles.btn]}>
+              <Text>Start Payment</Text>
+              <Icon name="ios-card" />
+            </Button>
+            <Button block success iconRight onPress={() => this.props.navigation.navigate('UpdateStore')} style={[styles.btn]}>
+              <Text>Update Database</Text>
+              <Icon name="ios-settings" />
+            </Button>
+          </View>
         </Content>
       </Container>
     );

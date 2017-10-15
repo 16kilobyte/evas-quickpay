@@ -6,7 +6,7 @@ export default TaxPayer = ({ taxPayerServices , updateState, state }) => (
   <Picker
     onValueChange={serviceId => updateState({ serviceId })}
     iosHeader="Select Service"
-    mode="dropdown"
+    mode="dialog"
     placeholder="Select Service"
     selectedValue={state.serviceId}>
       {taxPayerServices.map(taxPayerService => (

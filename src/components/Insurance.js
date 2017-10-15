@@ -7,7 +7,7 @@ export default Insurance = ({ vehicleTypes, vehicleCategories, insuranceServices
     <Picker
       onValueChange={vehicleType => updateState({ vehicleType })}
       iosHeader="Vehichle Type"
-      mode="dropdown"
+      mode="dialog"
       placeholder="Vehichle Type"
       selectedValue={state.vehicleType}>
         {vehicleTypes.map(vehicleType => (
@@ -17,7 +17,7 @@ export default Insurance = ({ vehicleTypes, vehicleCategories, insuranceServices
     <Picker
       onValueChange={vehicleCategory => updateState({ vehicleCategory })}
       iosHeader="Vehichle Category"
-      mode="dropdown"
+      mode="dialog"
       placeholder="Vehichle Category"
       selectedValue={state.vehicleCategory}>
         {vehicleCategories.map(vehicleCategory => (
@@ -27,7 +27,7 @@ export default Insurance = ({ vehicleTypes, vehicleCategories, insuranceServices
     <Picker
       onValueChange={serviceId => updateState({ serviceId })}
       iosHeader="Select Insurance"
-      mode="dropdown"
+      mode="dialog"
       placeholder="Select Insurance"
       selectedValue={state.serviceId}>
         {insuranceServices.map(insuranceService => (

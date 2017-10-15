@@ -1,42 +1,73 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Button, Text, Toast } from 'native-base';
+import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Icon, Spinner } from 'native-base';
+import { View, Image, StyleSheet, AsyncStorage } from 'react-native';
 
 import login from '../api/login';
-import * as storage from '../utils/storage'
-import * as auth from '../utils/auth'
+import initData from '../api/initData';
+import styles from '../assets/styles/common.js';
+import Colors from '../assets/literals/colors';
 
 export default class UpdateStore extends Component {
-  
-  static navigationOptions = {
-    navigationOptions: ({navigation}) => ({
-      title: `${navigation.state.params.name}'s Profile'`,
-    })
-  };
 
   constructor(props) {
     super(props)
     this.state = {
-      email: '',
-      password: ''
+      working: false,
+      error: {}
     }
   }
 
   componentDidMount() {
-    if(!auth.isLoggedIn) {
-      this.props.navigation.navigate('Login')
+    // AsyncStorage
+  }
+
+  syncStore() {
+    this.setState({ working: true })
+    try {
+      initData().then(response => {
+        if(response && response.status && response.status === 'success') {
+          AsyncStorage.setItem('bundle', JSON.stringify(response.configurations));
+          Toast.show({
+            type: 'success',
+            text: 'Sync completed',
+            buttonText: 'Okay',
+            duration: 5000,
+            onClose: () => {
+              this.props.navigation.navigate('Home')
+            }
+          });
+          this.setState({ working: false });
+        } else {
+          Toast.show({
+            type: 'danger',
+            text: 'Could not sync with server. Please, try again',
+            buttonText: 'Okay',
+            duration: 5000,
+            onClose: () => {
+              this.props.navigation.navigate('Home')
+            }
+          });
+        }
+      })
+    } catch(e) {
+      this.setState({ working: false, error: e });
     }
   }
 
   render() {
     return (
       <Container>
-        <Header />
         <Content>
-          <Form>
-            <Button block success>
-              <Text>Update Store</Text>
-            </Button>
-          </Form>
+          <View style={[styles.container]}>
+            <Image source={require('../assets/images/displayLogo.png')} height={64} />
+            {this.state.working && <Spinner color={Colors.primaryColor} />}
+            <Form>
+              <Button block iconRight onPress={() => this.syncStore()} style={[styles.primaryBtn, styles.btn]}>
+                <Text>Sync Store</Text>
+                <Icon name="ios-sync-outline" />
+              </Button>
+            </Form>
+          </View>
         </Content>
       </Container>
     );

@@ -1,5 +1,15 @@
 {
   "expo": {
-    "sdkVersion": "21.0.0"
+    "name": "Evas",
+    "icon": "./src/assets/images/logo.png",
+    "version": "1.0.0",
+    "slug": "evas-niger-app",
+    "sdkVersion": "21.0.0",
+    "android": {
+      "package": "ng.evas.niger"
+    },
+    "ios": {
+      "bundleIdentifier": "ng.evas.niger"
+    }
   }
 }
