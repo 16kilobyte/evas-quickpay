@@ -82,8 +82,8 @@ export default class StartPayment extends Component {
       if(!this.state.vehicleNumber) this.setState({ vehicleNumberError: true })
       else this.setState({ vehicleNumberError: false })
       if(!this.state.fullNameError && !this.state.phoneError && !this.state.vehicleNumberError) {
-        let { fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType, serviceType } = this.state
-        this.props.saveInsurance({ fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType, })
+        let { fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType, serviceType, serviceId } = this.state
+        this.props.saveInsurance({ fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType, serviceType, serviceId })
         this.props.navigation.navigate('Payment')
       }
     }
@@ -96,7 +96,7 @@ export default class StartPayment extends Component {
       <Container>
         <Content>
           <View style={[styles.container]}>
-            <Image source={require('../assets/images/displayLogoSm.png')} />
+            <Image source={require('../assets/images/displayLogoSm.png')} style={{ alignSelf: 'center' }} />
             <Form>
               <Item style={[styles.item]}>
                 <Input placeholder="First name" onChangeText={name => this.updateState({ fullName })} />

@@ -66,7 +66,7 @@ class InsurancePayment extends Component {
         this.setState({ amount: 0 })
         Toast.show({
           text: 'Invalid combination selected',
-          type: 'warning',
+          type: 'danger',
           duration: 5000
         })
       }
@@ -82,8 +82,8 @@ class InsurancePayment extends Component {
       if(!this.state.vehicleNumber) this.setState({ vehicleNumberError: true })
       else this.setState({ vehicleNumberError: false })
       if(!this.state.fullNameError && !this.state.phoneError && !this.state.vehicleNumberError) {
-        let { fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType } = this.state
-        this.props.saveInsurance({ fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType, serviceType: 'insurance' })
+        let { fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType, serviceId } = this.state
+        this.props.saveInsurance({ fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType, serviceId, serviceType: 'insurance' })
         this.props.navigation.navigate('Payment')
       }
     }
@@ -99,7 +99,7 @@ class InsurancePayment extends Component {
             <Image source={require('../assets/images/displayLogoSm.png')} />
             <Form>
               <Item style={[styles.item]} error={this.state.fullNameError}>
-                <Input placeholder="First name" onChangeText={name => this.updateState({ name })} />
+                <Input placeholder="First name" onChangeText={fullName => this.updateState({ fullName })} />
               </Item>
               <Item style={[styles.item]} error={this.state.phoneError}>
                 <Input placeholder="Phone" onChangeText={phone => this.updateState({ phone })} />

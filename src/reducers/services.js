@@ -1,4 +1,4 @@
-export default (state = { savedInsurance: {} }, action) => {
+export default (state = { savedService: {} }, action) => {
   switch (action.type) {
     case 'SAVE_INSURANCE':
       return {
