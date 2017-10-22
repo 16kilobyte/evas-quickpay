@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, AsyncStorage, Dimensions, StyleSheet, Image } from 'react-native'
 import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Picker, Icon, List, ListItem } from 'native-base'
-import PiePayment from 'pie-react-native/index'
 import { connect } from 'react-redux'
 
 import TaxPayer from '../components/TaxPayer'
@@ -20,15 +19,19 @@ class Services extends Component {
     super(props)
     this.state = {
       fullName: '',
+      fullNameError: false,
       phone: '',
+      phoneError: false,
       vehicleNumber: '',
-      serviceType: 'taxPayer',
+      vehicleNumberError: false,
+      serviceType: '',
       bundle: {},
       serviceId: null,
       vehicleType: null,
       vehicleCategory: null,
       amount: 0,
       visibility: false,
+      wait: false,
       paymentGateway: 'PIE.NG',
     }
   }
@@ -47,6 +50,7 @@ class Services extends Component {
   }
 
   updateAmount() {
+    this.setState({ wait: true })
     let { bundle } = this.props.navigation.state.params
     if(this.state.serviceType === 'taxPayer' && this.state.serviceId) {
       let costObj = bundle.taxPayerServiceCosts.find((service, key) => {
@@ -56,6 +60,11 @@ class Services extends Component {
         this.setState({ amount: costObj.cost/100 })
       } else {
         this.setState({ amount: 0 })
+        Toast.show({
+          test: 'Invalid service combination',
+          duration: 5000,
+          type: 'danger',
+        })
       }
     }
     
@@ -68,11 +77,16 @@ class Services extends Component {
                   && service['cid'] === this.state.vehicleCategory
                   && service['tid'] === this.state.vehicleType)
       })
-      console.log('vehicle', costObj)
       if(costObj) {
         this.setState({ amount: costObj.cost/100 })
       } else {
         this.setState({ amount: 0 })
+        this.setState({ wait: false })
+        Toast.show({
+          test: 'Invalid service combination',
+          duration: 5000,
+          type: 'danger',
+        })
       }
     }
   }
@@ -102,13 +116,13 @@ class Services extends Component {
           <View style={[styles.container]}>
             <Image source={require('../assets/images/displayLogoSm.png')} style={{ alignSelf: 'center' }} />
             <Form>
-              <Item style={[styles.item]}>
+              <Item style={[styles.item]} error={this.state.fullNameError}>
                 <Input placeholder="First name" onChangeText={name => this.updateState({ fullName })} />
               </Item>
-              <Item style={[styles.item]}>
+              <Item style={[styles.item]} error={this.state.phoneError}>
                 <Input placeholder="Phone" onChangeText={phone => this.updateState({ phone })} />
               </Item>
-              <Item style={[styles.item]}>
+              <Item style={[styles.item]} error={this.state.vehicleNumberError}>
                 <Input placeholder="Vehicle Number" onChangeText={vehicleNumber => this.updateState({ vehicleNumber })} />
               </Item>
               <View style={{ padding: 10 }}>
@@ -137,6 +151,7 @@ class Services extends Component {
                     vehicleServices={bundle.vehicleServices} /> }
               </View>
               <Button iconRight block onPress={() => this._next()} style={[styles.primaryBtn, styles.btn]}>
+                {this.state.wait && <Spinner color="#fff" />}
                 <Text>Pay ₦{this.state.amount.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')}</Text>
                 <Icon name="ios-card" />
               </Button>

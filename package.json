@@ -21,7 +21,6 @@
   "dependencies": {
     "expo": "^21.0.0",
     "native-base": "^2.3.2",
-    "pie-react-native": "^0.1.5",
     "react": "16.0.0-alpha.12",
     "react-native": "^0.48.4",
     "react-native-keyboard-spacer": "^0.4.1",

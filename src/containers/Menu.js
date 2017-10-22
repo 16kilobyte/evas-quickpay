@@ -10,23 +10,22 @@ import { saveUser } from '../actions'
 
 const SCREEN = Dimensions.get('window');
 
-export default class Menu extends Component {
+class Menu extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      user: {},
       bundle: {}
     }
   }
 
   async componentDidMount() {
-    const { navigation } = this.props;
+    const { navigation, saveUser } = this.props;
     try {
       let user = await AsyncStorage.getItem('user');
       if(user !== null) {
         user = JSON.parse(user)
-        this.setState({ user });
+        saveUser(user)
         let bundle = await AsyncStorage.getItem('bundle');
         if(bundle !== null) {
           bundle = JSON.parse(bundle)
@@ -61,10 +60,10 @@ export default class Menu extends Component {
         buttonText: 'Login',
         type: 'danger',
         onClose: () => {
-          this.props.navigation.navigate('Login')
+          navigation.navigate('Login')
         }
       });
-      this.props.navigation.navigate('Login')
+      navigation.navigate('Login')
     }
   }
 
@@ -101,3 +100,13 @@ export default class Menu extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  store: state
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  saveUser: (user) => dispatch(saveUser(user))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu)
