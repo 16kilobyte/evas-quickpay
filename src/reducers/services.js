@@ -5,7 +5,11 @@ export default (state = { savedService: {} }, action) => {
         ...state,
         savedService: action.insurance
       }
-  
+    case 'QUICK_PAYMENT_SUCCESS':
+      return {
+        ...state,
+        oldPayment: action.oldPayment
+      }
     default:
       return state
   }

@@ -2,15 +2,19 @@ import React, { Component } from 'react'
 import { View, AsyncStorage, Dimensions, StyleSheet, Image } from 'react-native'
 import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Picker, Icon, List, ListItem } from 'native-base'
 import PiePayment from 'pie-react-native/index'
+import { connect } from 'react-redux'
 
 import TaxPayer from '../components/TaxPayer'
 import Insurance from '../components/Insurance'
 import Vehicle from '../components/Vehicle'
 import Colors from '../assets/literals/colors'
 
-const SCREEN = Dimensions.get('window')
+import { isWorking, isDoneWorking, transactionStarted, transactionFail } from '../actions'
+import { getIsWorking } from '../reducers'
+import styles from '../assets/styles/common.js'
+import { paymentApiCharge, paymentApiVerify } from '../utils'
 
-export default class StartPayment extends Component {
+class Services extends Component {
 
   constructor(props) {
     super(props)
@@ -144,24 +148,12 @@ export default class StartPayment extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: SCREEN.height,
-    justifyContent: 'center',
-    padding: 8
-  },
-  item: {
-    marginVertical: 8
-  },
-  picker: {
-    margin: 20,
-  },
-  primaryBtn: {
-    backgroundColor: Colors.primaryColor,
-  },
-  btn: {
-    margin: 12,
-    borderRadius: 4,
-  }
-});
+const mapStateToProps = (state) => ({
+  store: state
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  saveInsurance: (insurance) => dispatch(saveInsurance(insurance))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Services)

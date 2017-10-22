@@ -1,6 +1,12 @@
-import { isWorking, isDoneWorking } from './common'
+import { isWorking, isDoneWorking, saveUser } from './common'
 import { login, logout, loginSuccess, loginFail } from './auth'
 import { transactionStarted, transactionFail, transactionVerified } from './payment'
-import { saveInsurance } from './services'
+import { saveInsurance, quickPaymentMade } from './services'
 
-export { isWorking, isDoneWorking, login, logout, loginSuccess, loginFail, saveInsurance, transactionStarted, transactionFail, transactionVerified }
+export {
+  saveUser,
+  isWorking,
+  isDoneWorking,
+  login, logout, loginSuccess, loginFail, saveInsurance, transactionStarted, transactionFail, transactionVerified,
+  quickPaymentMade
+}

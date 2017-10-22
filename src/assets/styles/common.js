@@ -27,5 +27,18 @@ export default styles = StyleSheet.create({
   btn: {
     margin: 12,
     borderRadius: 4,
+  },
+  item: {
+    marginVertical: 8
+  },
+  picker: {
+    margin: 20,
+  },
+  primaryBtn: {
+    backgroundColor: Colors.primaryColor,
+  },
+  btn: {
+    margin: 12,
+    borderRadius: 4,
   }
 })

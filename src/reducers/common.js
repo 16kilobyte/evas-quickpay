@@ -7,4 +7,16 @@ export const isWorking = (state = false, action) => {
     default:
       return state
   }
-} 
+}
+
+export const appStuff = (state = { user: {}, token: '' }, action) => {
+  switch (action.type) {
+    case 'SAVE_USER':
+      return {
+        ...state,
+        user: action.user
+      }
+    default:
+      return state
+  }
+}

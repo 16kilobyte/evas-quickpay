@@ -3,11 +3,12 @@ import { View, AsyncStorage, Dimensions, StyleSheet, Image } from 'react-native'
 import { Container, Content, Form, Item, Input, Button, Text, Toast, Spinner, Icon } from 'native-base'
 import { connect } from 'react-redux'
 
-import { isWorking, isDoneWorking, transactionStarted, transactionFail } from '../actions'
+import { isWorking, isDoneWorking, transactionStarted, transactionFail, quickPaymentMade } from '../actions'
 import { getIsWorking } from '../reducers'
 import Colors from '../assets/literals/colors'
 import styles from '../assets/styles/common.js'
 import { paymentApiCharge, paymentApiVerify } from '../utils'
+import { submitQuickPayment } from '../utils'
 
 import PaymentStep1 from '../components/PaymentStep1'
 import PaymentStep2 from '../components/PaymentStep2'
@@ -67,18 +68,32 @@ class Payment extends Component {
   }
 
   handleConfirmation() {
-    const isReady = this.props.isReady
+    const { isReady, isWorking, isDoneWorking, quickPaymentMade, navigation, store } = this.props
     if(!this.state.otp.length || this.state.otp.length !== 6) {
       this.setState({ otpError: true })
     } else this.setState({ otpError: false })
     if(!this.state.otpError) {
       if(isReady) {
         isWorking()
-        return paymentApiVerify({ authValue: this.state.otp, transactionId: this.props.store.payment.transaction.id })
+        return paymentApiVerify({ authValue: this.state.otp, transactionId: store.payment.transaction.id })
           .then(transaction => {
           transactionVerified(transaction)
-          isDoneWorking()
-          console.log('handlePayment->transaction', transaction)
+          Toast.show({
+            text: 'Payment Success',
+            type: 'success'
+          })
+          const quickObj = {...store.services.savedService, registrationCenter: this.state.app.user.registrationCenter, transactionReference: transaction.id}
+          submitQuickPayment(quickObj).then(response => {
+            quickPaymentMade(response)
+            navigation.navigate('Menu')
+          }).catch(error => {
+            transactionFail(error)
+            Toast.show({
+              text: error.message || error,
+              type: 'danger',
+            })
+          })
+          console.log('handleConfirmation->transaction', transaction)
         }).catch(error => {
           transactionFail(error)
           isDoneWorking()
@@ -127,7 +142,8 @@ const mapDispatchToProps = (dispatch) => ({
   isWorking: () => dispatch(isWorking()),
   isDoneWorking: () => dispatch(isDoneWorking()),
   transactionStarted: transaction => dispatch(loginSuccess(transaction)),
-  transactionFail: transaction => dispatch(transactionFail(error))
+  transactionFail: transaction => dispatch(transactionFail(error)),
+  quickPaymentMade: quickObj => dispatch(quickPaymentMade(quickObj))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Payment)

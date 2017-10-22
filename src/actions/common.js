@@ -5,3 +5,7 @@ export const isWorking = () => dispatch => ({
 export const isDoneWorking = () => dispatch => dispatch({
   type: 'IS_WORKING'
 })
+
+export const saveUser = (user) => ({
+  type: 'SAVE_USER', user
+})

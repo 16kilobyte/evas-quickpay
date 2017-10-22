@@ -6,6 +6,8 @@ import { getConfigurations } from '../utils'
 import Colors from '../assets/literals/colors'
 import styles from '../assets/styles/common.js'
 
+import { saveUser } from '../actions'
+
 const SCREEN = Dimensions.get('window');
 
 export default class Menu extends Component {
