@@ -1,61 +1,118 @@
-import React from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
-import { Root, Container, Header, Content, Spinner } from 'native-base';
-import Expo, { Constants } from 'expo';
-import { StackNavigator } from 'react-navigation';
+import React from 'react'
+import { BackHandler, StyleSheet, View, ScrollView } from 'react-native'
+import { Root, Container, Header, Content, Spinner } from 'native-base'
+import Expo, { Constants } from 'expo'
+import { StackNavigator, addNavigationHelpers, NavigationActions } from 'react-navigation'
+import { Provider, connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
+import getStore from './src/store'
+import { isDoneWorking } from './src/actions'
+import { getIsWorking } from './src/reducers'
+import styles from './src/assets/styles/common'
+
+// Screens
 import Login from './src/containers/Login'
-import Home from './src/containers/Home'
-import StartPayment from './src/containers/StartPayment'
+import Menu from './src/containers/Menu'
+import Services from './src/containers/Services'
+import Insurance from './src/containers/Insurance'
 import UpdateStore from './src/containers/UpdateStore'
+import Payment from './src/containers/Payment'
 
 import Loading from './src/components/Loading'
 
-const MainApp = StackNavigator({
+const AppNavigator = StackNavigator({
   Login: { screen: Login },
-  Home: { screen: Home },
-  StartPayment: { screen: StartPayment },
+  Menu: { screen: Menu },
+  Services: { screen: Services },
+  Insurance: { screen: Insurance },
+  Payment: { screen: Payment },
   UpdateStore: { screen: UpdateStore },
-}, { headerMode: 'none' });
+}, { headerMode: 'none' })
 
-export default class App extends React.Component {
+const initialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Login'))
+
+const navReducer = (state = initialState, action) => {
+  const newState = AppNavigator.router.getStateForAction(action, state)
+  return newState || state
+}
+
+class BaseApp extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      ready: false
-    }
   }
 
   async componentWillMount() {
-    await Expo.Font.loadAsync({
+    try {
+      await Expo.Font.loadAsync({
       'Roboto': require('native-base/Fonts/Roboto.ttf'),
       'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
       'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
-    });
-    this.setState({ ready: true })
+      });
+      this.props.makeReady()
+    } catch(e) {
+      console.log(e)
+    }
   }
 
-  showLoading() {
-    this.setState({ ready: false })
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
+  }
+  
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
   }
 
-  hideLoading() {
-    this.setState({ ready: true })
+  onBackPress = () => {
+    const { dispatch, nav } = this.props
+    if (nav.index === 0) {
+      return false
+    }
+    dispatch(NavigationActions.back())
+    return true
   }
 
   render() {
-    if(this.state.ready) return (<Root><MainApp /></Root>)
-    return (<View style={styles.container}><Loading /></View>)
+    console.log(this.props)
+    const { dispatch, nav } = this.props
+    if(!this.props.isReady) return (<Loading />)
+    return (
+      <Root>
+        <AppNavigator navigation={addNavigationHelpers({
+          dispatch: dispatch,
+          state: nav,
+        })} />
+      </Root>
+    );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: Constants.statusBarHeight
-  },
+const mapStateToProps = (state) => ({
+  nav: state.nav,
+  isReady: getIsWorking(state)
 });
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    // actions: bindActionCreators(actions, dispatch)
+    makeReady: () => dispatch(isDoneWorking()),
+    dispatch
+  };
+}
+
+const AppWithNavigationState = connect(mapStateToProps, mapDispatchToProps)(BaseApp);
+
+const store = getStore(navReducer)
+
+export default class App extends React.Component {
+  render() {
+    return (
+      <Root>
+        <Provider store={store}>
+          <AppWithNavigationState />
+        </Provider>
+      </Root>
+    )
+  }
+}

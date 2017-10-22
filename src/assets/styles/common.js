@@ -1,5 +1,6 @@
-import { StyleSheet, Dimensions } from 'react-native';
-import Colors from '../literals/colors';
+import { StyleSheet, Dimensions } from 'react-native'
+import Colors from '../literals/colors'
+import { Constants } from 'expo'
 
 const Screen = Dimensions.get('window');
 
@@ -9,6 +10,13 @@ export default styles = StyleSheet.create({
     height: Screen.height,
     justifyContent: 'center',
     padding: 8
+  },
+  container2: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: Constants.statusBarHeight
   },
   item: {
     marginVertical: 15

@@ -1,23 +1,16 @@
-import * as storage from './storage'
+import { LOGIN } from '../config'
+import { get, post } from './api'
 
-export const getUserFromStore = () => {
-  return new Promise( async (resolve, reject) => {
-    try {
-      const user = await storage.get('user');
-      resolve(user);
-    } catch(e) {
-      resolve(false);
-    }
-  });
-}
-
-export const getBundleFromStore = () => {
-  return new Promise( async (resolve, reject) => {
-    try {
-      const bundle = await storage.get('bundle');
-      return bundle;
-    } catch(e) {
-      return false;
-    }
-  });
+export const loginApi = (user) => {
+	return new Promise((resolve, reject) => {
+		post(LOGIN, user).then(response => {
+			if(response && response.status && response.status === 'success') {
+				resolve(response.message, response.token);
+			} else {
+				reject(response)
+			}
+		}).catch (error => {
+			reject(error)
+		})
+	})
 }

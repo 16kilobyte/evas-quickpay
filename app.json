@@ -8,8 +8,7 @@
     "android": {
       "package": "ng.evas.niger"
     },
-    "ios": {
-      "bundleIdentifier": "ng.evas.niger"
-    }
+    "orientation": "portrait",
+    "primaryColor": "#336633"
   }
 }

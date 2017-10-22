@@ -1,23 +1,14 @@
-import React, { Component } from 'react';
-import { View, StyleSheet, Image, Dimensions, AsyncStorage } from 'react-native';
-import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Icon } from 'native-base';
+import React, { Component } from 'react'
+import { View, StyleSheet, Image, Dimensions, AsyncStorage } from 'react-native'
+import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Icon } from 'native-base'
 
-import login from '../api/login';
-import initData from '../api/initData';
-import * as storage from '../utils/storage'
-import * as auth from '../utils/auth';
-import Colors from '../assets/literals/colors';
-import styles from '../assets/styles/common.js';
+import { getConfigurations } from '../utils'
+import Colors from '../assets/literals/colors'
+import styles from '../assets/styles/common.js'
 
 const SCREEN = Dimensions.get('window');
 
-export default class Home extends Component {
-  
-  static navigationOptions = {
-    navigationOptions: ({navigation}) => ({
-      title: `${navigation.state.params.name}'s Profile'`,
-    })
-  };
+export default class Menu extends Component {
 
   constructor(props) {
     super(props)
@@ -33,16 +24,13 @@ export default class Home extends Component {
       let user = await AsyncStorage.getItem('user');
       if(user !== null) {
         user = JSON.parse(user)
-        console.log('user', user);
         this.setState({ user });
         let bundle = await AsyncStorage.getItem('bundle');
         if(bundle !== null) {
           bundle = JSON.parse(bundle)
-          console.log('bundle', bundle);
           this.setState({ bundle });
         } else {
-          initData().then(response => {
-            console.log('init', response);
+          getConfigurations().then(response => {
             if(response && response.status && response.status === 'success') {
               AsyncStorage.setItem('bundle', JSON.stringify(response.configurations))
               this.setState({ bundle: response.configurations })
@@ -61,10 +49,10 @@ export default class Home extends Component {
         }
       } else {
         console.log('Not logged in')
-        navigation.navigate('Login');
+        navigation.navigate('Login')
       }
     } catch(e) {
-      console.log(`${e} in src/container/Home`);
+      console.log(`${e} in src/container/Menu`);
       Toast.show({
         message: 'An unexpected error occured. Please, restart the app',
         position: 'bottom',
@@ -79,7 +67,6 @@ export default class Home extends Component {
   }
 
   render() {
-    console.log(auth.getBundleFromStore())
     return (
       <Container>
         <Content>
@@ -89,7 +76,15 @@ export default class Home extends Component {
             <Button
               block
               iconRight
-              onPress={() => this.props.navigation.navigate('StartPayment', { bundle: this.state.bundle, user: this.state.user })}
+              onPress={() => this.props.navigation.navigate('Insurance', { bundle: this.state.bundle, user: this.state.user })}
+              style={[styles.primaryBtn, styles.btn]}>
+              <Text>Insurance</Text>
+              <Icon name="ios-pulse" />
+            </Button>
+            <Button
+              block
+              iconRight
+              onPress={() => this.props.navigation.navigate('Services', { bundle: this.state.bundle, user: this.state.user })}
               style={[styles.primaryBtn, styles.btn]}>
               <Text>Start Payment</Text>
               <Icon name="ios-card" />

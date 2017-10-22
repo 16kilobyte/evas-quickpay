@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Icon, Spinner } from 'native-base';
-import { View, Image, StyleSheet, AsyncStorage } from 'react-native';
+import React, { Component } from 'react'
+import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Icon, Spinner } from 'native-base'
+import { View, Image, StyleSheet, AsyncStorage } from 'react-native'
 
-import login from '../api/login';
-import initData from '../api/initData';
-import styles from '../assets/styles/common.js';
-import Colors from '../assets/literals/colors';
+import styles from '../assets/styles/common.js'
+import Colors from '../assets/literals/colors'
 
 export default class UpdateStore extends Component {
 

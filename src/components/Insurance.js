@@ -10,6 +10,7 @@ export default Insurance = ({ vehicleTypes, vehicleCategories, insuranceServices
       mode="dialog"
       placeholder="Vehichle Type"
       selectedValue={state.vehicleType}>
+        <Item label="Vehicle type" value="" />
         {vehicleTypes.map(vehicleType => (
           <Item label={vehicleType.type} key={vehicleType.id} value={vehicleType.id} />
         ))}
@@ -20,6 +21,7 @@ export default Insurance = ({ vehicleTypes, vehicleCategories, insuranceServices
       mode="dialog"
       placeholder="Vehichle Category"
       selectedValue={state.vehicleCategory}>
+        <Item label="Vehicle category" value="" />
         {vehicleCategories.map(vehicleCategory => (
           <Item label={vehicleCategory.category} key={vehicleCategory.id} value={vehicleCategory.id} />
         ))}
@@ -30,6 +32,7 @@ export default Insurance = ({ vehicleTypes, vehicleCategories, insuranceServices
       mode="dialog"
       placeholder="Select Insurance"
       selectedValue={state.serviceId}>
+        <Item label="Service" value="" />
         {insuranceServices.map(insuranceService => (
           <Item label={insuranceService.title} key={insuranceService.id} value={insuranceService.id} />
         ))}
