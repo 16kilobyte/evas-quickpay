@@ -14,8 +14,8 @@ export const get = (endpoint) => {
 			let responseJson = await response.json()
 			resolve(responseJson)
 		} catch (error) {
-			console.error(`Error thrown in api/get: ${error}`)
-			reject(error)
+			console.log(`Error thrown in api/get: ${error}`)
+			reject(new Error('Application could not contact the server'))
 		}
 	})
 }
@@ -39,7 +39,7 @@ export const post = (endpoint, body, merge = true) => {
 			resolve(responseJson)
 		} catch (error) {
 			console.log(`Error thrown in api/post: ${error}`)
-			reject(error)
+			reject(new Error('Application could not contact the server'))
 		}
 	})
 }
