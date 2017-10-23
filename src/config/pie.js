@@ -1,2 +1,2 @@
-export const PUBLIC_KEY = "pk_F3nbWIv0T8VCpTzW"
+export const PUBLIC_KEY = "pklv_ds8KfRoBGaSXAFfF"
 export const CUSTOMER = "payments@evas.ng"

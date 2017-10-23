@@ -1,9 +1,9 @@
 export default (state = { savedService: {} }, action) => {
   switch (action.type) {
-    case 'SAVE_INSURANCE':
+    case 'SAVE_SERVICE':
       return {
         ...state,
-        savedService: action.insurance
+        savedService: action.service
       }
     case 'QUICK_PAYMENT_SUCCESS':
       return {

@@ -1,5 +1,5 @@
-export const saveInsurance = (insurance) => ({
-  type: 'SAVE_INSURANCE', insurance
+export const saveService = (service) => ({
+  type: 'SAVE_SERVICE', service
 })
 
 export const quickPaymentMade = (quickpayment) => ({

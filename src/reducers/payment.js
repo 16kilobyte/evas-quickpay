@@ -9,7 +9,7 @@ export default (state = { transaction: {}, step: 1 }, action) => {
     case 'TRNX_COMPLETED':
       return {
         ...state,
-        transaction: transaction,
+        transaction: action.transaction,
         step: 3
       }
     default:

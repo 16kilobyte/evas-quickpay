@@ -4,7 +4,7 @@ import { Form, Item, Icon, Button, Input, Text } from 'native-base'
 import KeyboardSpacer from 'react-native-keyboard-spacer'
 import Colors from '../assets/literals/colors'
 
-export default ({ style, updateSate, handlePayment, isReady, otpError }) => (
+export default ({ style, updateSate, handleConfirmation, isReady, otpError }) => (
   <View style={[style.container]}>
     <Image source={require('../assets/images/pieLogo.png')} style={{height: 124, width: 124, alignSelf: 'center'}} />
     {!isReady && <Spinner color={Colors.primaryColor} />}

@@ -14,14 +14,15 @@ export const get = (endpoint) => {
 			let responseJson = await response.json()
 			resolve(responseJson)
 		} catch (error) {
-			console.error(`Error thrown in api/login: ${error}`)
+			console.error(`Error thrown in api/get: ${error}`)
 			reject(error)
 		}
 	})
 }
 
 export const post = (endpoint, body, merge = true) => {
-  if(merge) endpoint = BASE.concat(endpoint)
+	if(merge) endpoint = BASE.concat(endpoint)
+	// console.error(endpoint)
   body = JSON.stringify(body)
   return new Promise(async (resolve, reject) => {
 		try {
@@ -33,10 +34,11 @@ export const post = (endpoint, body, merge = true) => {
 				},
 				body
 			})
+			console.log(response)
 			let responseJson = await response.json()
 			resolve(responseJson)
 		} catch (error) {
-			console.error(`Error thrown in api/login: ${error}`)
+			console.log(`Error thrown in api/post: ${error}`)
 			reject(error)
 		}
 	})

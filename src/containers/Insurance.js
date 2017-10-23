@@ -8,7 +8,7 @@ import Insurance from '../components/Insurance'
 import Vehicle from '../components/Vehicle'
 import Colors from '../assets/literals/colors'
 
-import { saveInsurance } from '../actions'
+import { saveService } from '../actions'
 
 const SCREEN = Dimensions.get('window')
 
@@ -31,16 +31,6 @@ class InsurancePayment extends Component {
       visibility: false,
       paymentGateway: 'PIE.NG',
       wait: false
-    }
-  }
-
-  componentDidMount() {
-    const { params } = this.props.navigation.state;
-    console.log(params);
-    if(!params.user || !params.bundle) {
-      this.props.navigation.navigate('Login');
-    } else {
-      this.setState({ bundle: params.bundle, user: params.user });
     }
   }
 
@@ -96,13 +86,13 @@ class InsurancePayment extends Component {
       <Container>
         <Content>
           <View style={[styles.container]}>
-            <Image source={require('../assets/images/displayLogoSm.png')} />
+            <Image source={require('../assets/images/displayLogoSm.png')} style={{ alignSelf: 'center' }} />
             <Form>
               <Item style={[styles.item]} error={this.state.fullNameError}>
                 <Input placeholder="First name" onChangeText={fullName => this.updateState({ fullName })} />
               </Item>
               <Item style={[styles.item]} error={this.state.phoneError}>
-                <Input placeholder="Phone" onChangeText={phone => this.updateState({ phone })} />
+                <Input placeholder="Phone" onChangeText={phone => this.updateState({ phone })} keyboardType="phone-pad" />
               </Item>
               <Item style={[styles.item]} error={this.state.vehicleNumberError}>
                 <Input placeholder="Vehicle Number" onChangeText={vehicleNumber => this.updateState({ vehicleNumber })} />
@@ -156,7 +146,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  saveInsurance: (insurance) => dispatch(saveInsurance(insurance))
+  saveInsurance: (insurance) => dispatch(saveService(insurance))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(InsurancePayment)

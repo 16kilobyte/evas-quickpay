@@ -9,6 +9,7 @@ export default TaxPayer = ({ taxPayerServices , updateState, state }) => (
     mode="dialog"
     placeholder="Select Service"
     selectedValue={state.serviceId}>
+      <Item label="Select Taypayer Service" value="" />
       {taxPayerServices.map(taxPayerService => (
         <Item label={taxPayerService.service} key={taxPayerService.id} value={taxPayerService.id} />
       ))}

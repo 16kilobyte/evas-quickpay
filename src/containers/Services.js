@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, AsyncStorage, Dimensions, StyleSheet, Image } from 'react-native'
-import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Picker, Icon, List, ListItem } from 'native-base'
+import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Picker, Icon, Spinner } from 'native-base'
 import { connect } from 'react-redux'
 
 import TaxPayer from '../components/TaxPayer'
@@ -8,7 +8,7 @@ import Insurance from '../components/Insurance'
 import Vehicle from '../components/Vehicle'
 import Colors from '../assets/literals/colors'
 
-import { isWorking, isDoneWorking, transactionStarted, transactionFail } from '../actions'
+import { isWorking, isDoneWorking, transactionStarted, transactionFail, saveService } from '../actions'
 import { getIsWorking } from '../reducers'
 import styles from '../assets/styles/common.js'
 import { paymentApiCharge, paymentApiVerify } from '../utils'
@@ -35,17 +35,9 @@ class Services extends Component {
       paymentGateway: 'PIE.NG',
     }
   }
-
-  componentDidMount() {
-    const { params } = this.props.navigation.state
-    if(!params.user || !params.bundle) {
-      this.props.navigation.navigate('Login')
-    } else {
-      this.setState({ bundle: params.bundle, user: params.user })
-    }
-  }
-
+  
   updateState(newState = {}) {
+    console.log(newState)
     this.setState(newState, this.updateAmount)
   }
 
@@ -58,6 +50,7 @@ class Services extends Component {
       })
       if(costObj) {
         this.setState({ amount: costObj.cost/100 })
+        this.setState({ wait: false })
       } else {
         this.setState({ amount: 0 })
         Toast.show({
@@ -71,7 +64,6 @@ class Services extends Component {
     if(this.state.serviceType === 'vehicle' && this.state.serviceId
     && this.state.vehicleType && this.state.vehicleCategory) {
       let { vehicleType, vehicleCategory, serviceId } = this.state
-      console.log('state', { vehicleType, vehicleCategory, serviceId })
       let costObj = bundle.vehicleServiceCosts.find((service, key) => {
         return (service['sid'] === this.state.serviceId
                   && service['cid'] === this.state.vehicleCategory
@@ -79,9 +71,9 @@ class Services extends Component {
       })
       if(costObj) {
         this.setState({ amount: costObj.cost/100 })
+        this.setState({ wait: false })
       } else {
         this.setState({ amount: 0 })
-        this.setState({ wait: false })
         Toast.show({
           test: 'Invalid service combination',
           duration: 5000,
@@ -101,7 +93,7 @@ class Services extends Component {
       else this.setState({ vehicleNumberError: false })
       if(!this.state.fullNameError && !this.state.phoneError && !this.state.vehicleNumberError) {
         let { fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType, serviceType, serviceId } = this.state
-        this.props.saveInsurance({ fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType, serviceType, serviceId })
+        this.props.saveService({ fullName, phone, vehicleNumber, vehicleCategory, amount, paymentGateway, vehicleType, serviceType, serviceId })
         this.props.navigation.navigate('Payment')
       }
     }
@@ -117,23 +109,23 @@ class Services extends Component {
             <Image source={require('../assets/images/displayLogoSm.png')} style={{ alignSelf: 'center' }} />
             <Form>
               <Item style={[styles.item]} error={this.state.fullNameError}>
-                <Input placeholder="First name" onChangeText={name => this.updateState({ fullName })} />
+                <Input placeholder="First name" onChangeText={fullName => this.updateState({ fullName })} />
               </Item>
               <Item style={[styles.item]} error={this.state.phoneError}>
-                <Input placeholder="Phone" onChangeText={phone => this.updateState({ phone })} />
+                <Input placeholder="Phone" onChangeText={phone => this.updateState({ phone })} keyboardType="phone-pad" />
               </Item>
               <Item style={[styles.item]} error={this.state.vehicleNumberError}>
                 <Input placeholder="Vehicle Number" onChangeText={vehicleNumber => this.updateState({ vehicleNumber })} />
               </Item>
               <View style={{ padding: 10 }}>
                 <Picker
-                  onSelectedItemsChange={serviceType => this.updateState({ serviceType })}
+                  onValueChange={serviceType => this.updateState({ serviceType })}
                   iosHeader="Service Type"
                   mode="dialog"
                   placeholder="Service Type"
                   selectedValue={this.state.serviceType}
                   styles={[styles.picker]}>
-                  <Item label="Service type" value="" />
+                  <Item label="Select Service Type" value="" />
                   <Item label="Tax Payer Services" key="taxPayer" value="taxPayer" />
                   <Item label="Vehicle Services" key="vehicle"  value="vehicle" />
                 </Picker>
@@ -168,7 +160,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  saveInsurance: (insurance) => dispatch(saveInsurance(insurance))
+  saveService: (insurance) => dispatch(saveService(insurance))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Services)

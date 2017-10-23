@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
 import { View, StyleSheet, Image, Dimensions, AsyncStorage } from 'react-native'
 import { Container, Header, Content, Form, Item, Input, Button, Text, Toast, Icon } from 'native-base'
+import { connect } from 'react-redux'
 
 import { getConfigurations } from '../utils'
 import Colors from '../assets/literals/colors'
 import styles from '../assets/styles/common.js'
-
-import { saveUser } from '../actions'
-
-const SCREEN = Dimensions.get('window');
+import { saveUser, isDoneWorking } from '../actions'
 
 class Menu extends Component {
 
@@ -106,7 +104,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  saveUser: (user) => dispatch(saveUser(user))
+  saveUser: (user) => dispatch(saveUser(user)),
+  makeReady: () => dispatch(isDoneWorking()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu)

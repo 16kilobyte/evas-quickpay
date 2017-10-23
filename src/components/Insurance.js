@@ -32,7 +32,7 @@ export default Insurance = ({ vehicleTypes, vehicleCategories, insuranceServices
       mode="dialog"
       placeholder="Select Insurance"
       selectedValue={state.serviceId}>
-        <Item label="Service" value="" />
+        <Item label="Insurance provider" value="" />
         {insuranceServices.map(insuranceService => (
           <Item label={insuranceService.title} key={insuranceService.id} value={insuranceService.id} />
         ))}

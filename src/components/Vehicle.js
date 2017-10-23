@@ -10,6 +10,7 @@ export default Vehicle = ({ vehicleTypes, vehicleCategories, vehicleServices, up
       mode="dialog"
       placeholder="Vehichle Type"
       selectedValue={state.vehicleType}>
+        <Item label="Vehicle Type" value="" />
         {vehicleTypes.map(vehicleType => (
           <Item label={vehicleType.type} key={vehicleType.id} value={vehicleType.id} />
         ))}
@@ -20,6 +21,7 @@ export default Vehicle = ({ vehicleTypes, vehicleCategories, vehicleServices, up
       mode="dialog"
       placeholder="Vehicle Category"
       selectedValue={state.vehicleCategory}>
+        <Item label="Vehicle Category" value="" />
         {vehicleCategories.map(vehicleCategory => (
           <Item label={vehicleCategory.category} key={vehicleCategory.id} value={vehicleCategory.id} />
         ))}
@@ -30,6 +32,7 @@ export default Vehicle = ({ vehicleTypes, vehicleCategories, vehicleServices, up
       mode="dialog"
       placeholder="Select Service"
       selectedValue={state.serviceId}>
+        <Item label="Select Vehicle Service" value="" />
         {vehicleServices.map(vehicleService => (
           <Item label={vehicleService.service} key={vehicleService.id} value={vehicleService.id} />
         ))}
