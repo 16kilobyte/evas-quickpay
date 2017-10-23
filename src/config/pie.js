@@ -1,5 +1,5 @@
-/* Imo */
-export const PUBLIC_KEY = "pklv_6sermKlnPJ0jtGbY"
+/* Edo */
+export const PUBLIC_KEY = "pklv_84DNylgseQZarpNj"
 export const CUSTOMER = "payments@niger.evas.ng"
-export const INSURANCE_PUBKEY = "pklv_mJnrBo4wWkU3LQIT"
+export const INSURANCE_PUBKEY = "pklv_04ZoleQVcy9wHLCt"
 export const DEV_WALLET = "wal_evasDevAtNiger"
