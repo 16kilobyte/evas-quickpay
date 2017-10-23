@@ -10,7 +10,7 @@ export default (state = { transaction: {}, step: 1 }, action) => {
       return {
         ...state,
         transaction: action.transaction,
-        step: 3
+        step: 1
       }
     default:
       return state

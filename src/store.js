@@ -7,6 +7,6 @@ import getRootReducer from './reducers'
 export default getStore = (navReducer) => (createStore(
     getRootReducer(navReducer),
     undefined,
-    applyMiddleware(thunk, logger)
+    applyMiddleware(thunk/*, logger*/)
   )
 );

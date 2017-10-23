@@ -54,7 +54,7 @@ class Services extends Component {
       } else {
         this.setState({ amount: 0 })
         Toast.show({
-          test: 'Invalid service combination',
+          text: 'Invalid service combination',
           duration: 5000,
           type: 'danger',
         })
@@ -75,7 +75,7 @@ class Services extends Component {
       } else {
         this.setState({ amount: 0 })
         Toast.show({
-          test: 'Invalid service combination',
+          text: 'Invalid service combination',
           duration: 5000,
           type: 'danger',
         })

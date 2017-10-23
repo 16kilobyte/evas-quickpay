@@ -1,4 +1,4 @@
-export const isWorking = (state = false, action) => {
+export const isWorking = (state = true, action) => {
   switch(action.type) {
     case 'IS_READY':
       return false

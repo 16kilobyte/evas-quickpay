@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { View, AsyncStorage, Dimensions, StyleSheet, Image } from 'react-native'
-import { Container, Content, Form, Item, Input, Button, Text, Toast, Spinner, Icon } from 'native-base'
+import { Container, Content, Button, Text, Toast } from 'native-base'
 import { connect } from 'react-redux'
+import { CustomSpinner } from '../components/Loading'
 
 import { isWorking, isDoneWorking, transactionStarted, transactionFail, transactionVerified, quickPaymentMade } from '../actions'
 import { getIsWorking } from '../reducers'
@@ -25,15 +26,15 @@ class Payment extends Component {
   }
 
   handlePayment() {
-    const { isReady, isWorking, isDoneWorking, transactionStarted, transactionFail, navigation, store } = this.props
+    const { isWorking, isDoneWorking, transactionStarted, transactionFail, navigation, store } = this.props
     const { phone, phoneError } = this.state
     if(!phone.length || phone.length !== 11) {
       this.setState({ phoneError: true })
     } else this.setState({ phoneError: false })
     if(!phoneError) {
-      if(isReady) {
+      if(!store.isWorking) {
         isWorking()
-        return paymentApiCharge({ phone: phone, amount: this.props.store.services.savedService.amount })
+        return paymentApiCharge({ phone: phone, amount: store.services.savedService.amount, serviceType: store.services.savedService.serviceType})
         .then(transaction => {
           console.log(transaction)
           transactionStarted(transaction)
@@ -64,27 +65,36 @@ class Payment extends Component {
   }
 
   handleConfirmation() {
-    const { isReady, isWorking, isDoneWorking, quickPaymentMade, navigation, store } = this.props
+    const { isWorking, isDoneWorking, quickPaymentMade, navigation, store } = this.props
     const { otp, otpError } = this.state
     if(!otp.length || otp.length !== 6) {
       this.setState({ otpError: true })
     } else this.setState({ otpError: false })
     if(!otpError) {
-      if(isReady) {
+      if(!store.isWorking) {
         isWorking()
-        return paymentApiVerify({ authValue: otp, transactionId: store.payment.transaction.id })
+        return paymentApiVerify({ authValue: otp, transactionId: store.payment.transaction.id, serviceType: store.services.savedService.serviceType })
           .then(transaction => {
           transactionVerified(transaction)
           Toast.show({
-            text: 'Payment Success',
+            text: 'Payment Successful',
             type: 'success'
           })
-          const quickObj = {...store.services.savedService, registrationCenter: store.app.user.registrationCenter, transactionReference: transaction.id}
+          const quickObj = {...store.services.savedService, registrationCenter: store.app.user['registration_center'], transactionReference: transaction.id}
           submitQuickPayment(quickObj).then(response => {
             quickPaymentMade(response)
-            navigation.navigate('Menu')
+            isDoneWorking()
+            Toast.show({
+              text: 'Payment Successful',
+              type: 'success',
+              position: "top"
+            })
+            setTimeout(() => {
+              navigation.navigate('Menu')
+            }, 5000);
           }).catch(error => {
             transactionFail(error)
+            isDoneWorking()
             Toast.show({
               text: error.message || error,
               type: 'danger',
@@ -112,22 +122,29 @@ class Payment extends Component {
   }
 
   render() {
+    const { store, navigation } = this.props
+    console.log('Payment->render', store)
     return (
       <Container>
         <Content>
-          {this.props.store.payment.step === 1 &&
+          <CustomSpinner visible={store.isWorking} />
+          {store.payment.step === 1 &&
             <PaymentStep1
               style={styles}
-              isReady={this.props.isReady}
+              isWorking={store.isWorking}
               updateSate={obj => this.setState(obj)}
+              cancelPayment={() => navigation.goBack()}
               handlePayment={() => this.handlePayment()}
+              amount={store.services.savedService.amount}
               phoneError={this.state.phoneError} />}
-          {this.props.store.payment.step === 2 &&
+          {store.payment.step === 2 &&
             <PaymentStep2
               style={styles}
-              isReady={this.props.isReady}
+              isWorking={store.isWorking}
               updateSate={obj => this.setState(obj)}
+              cancelPayment={() => navigation.goBack()}
               handleConfirmation={() => this.handleConfirmation()}
+              amount={store.services.savedService.amount}
               otpError={this.state.otpError} />}
         </Content>
       </Container>
@@ -136,7 +153,7 @@ class Payment extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  isReady: () => getIsWorking(state),
+  isReady: getIsWorking(state),
   store: state
 })
 

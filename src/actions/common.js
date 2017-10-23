@@ -1,9 +1,9 @@
 export const isWorking = () => dispatch => ({
-  type: 'IS_READY',
+  type: 'IS_WORKING',
 })
 
 export const isDoneWorking = () => dispatch => dispatch({
-  type: 'IS_WORKING'
+  type: 'IS_READY'
 })
 
 export const saveUser = (user) => ({

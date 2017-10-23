@@ -1,10 +1,11 @@
 import React from 'react'
 import { BackHandler, StyleSheet, View, ScrollView } from 'react-native'
-import { Root, Container, Header, Content, Spinner } from 'native-base'
-import Expo, { Constants } from 'expo'
+import { Root, Container, Header, Content } from 'native-base'
+import { Font, Constants } from 'expo'
 import { StackNavigator, addNavigationHelpers, NavigationActions } from 'react-navigation'
 import { Provider, connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import Spinner from 'react-native-loading-spinner-overlay'
 
 import getStore from './src/store'
 import { isDoneWorking } from './src/actions'
@@ -22,15 +23,15 @@ import Payment from './src/containers/Payment'
 import Loading from './src/components/Loading'
 
 const AppNavigator = StackNavigator({
-  Login: { screen: Login },
   Menu: { screen: Menu },
+  Login: { screen: Login },
   Services: { screen: Services },
   Insurance: { screen: Insurance },
   Payment: { screen: Payment },
   UpdateStore: { screen: UpdateStore },
 }, { headerMode: 'none' })
 
-const initialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Login'))
+const initialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('Menu'))
 
 const navReducer = (state = initialState, action) => {
   const newState = AppNavigator.router.getStateForAction(action, state)
@@ -45,7 +46,7 @@ class BaseApp extends React.Component {
 
   async componentWillMount() {
     try {
-      await Expo.Font.loadAsync({
+      await Font.loadAsync({
       'Roboto': require('native-base/Fonts/Roboto.ttf'),
       'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
       'Ionicons': require('@expo/vector-icons/fonts/Ionicons.ttf'),
@@ -65,8 +66,8 @@ class BaseApp extends React.Component {
   }
 
   onBackPress = () => {
-    const { dispatch, nav } = this.props
-    if (nav.index === 0) {
+    const { dispatch, store } = this.props
+    if (store.nav.index === 0) {
       return false
     }
     dispatch(NavigationActions.back())
@@ -74,31 +75,29 @@ class BaseApp extends React.Component {
   }
 
   render() {
-    console.log(this.props)
-    const { dispatch, nav } = this.props
-    if(!this.props.isReady) return (<Loading />)
+    const { dispatch, store } = this.props
+    if(store.isWorking) return (<Loading />)
     return (
       <Root>
         <AppNavigator navigation={addNavigationHelpers({
-          dispatch: dispatch,
-          state: nav,
+          dispatch,
+          state: store.nav,
         })} />
       </Root>
-    );
+    )
   }
 }
 
 const mapStateToProps = (state) => ({
-  nav: state.nav,
+  store: state,
   isReady: getIsWorking(state)
-});
+})
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // actions: bindActionCreators(actions, dispatch)
     makeReady: () => dispatch(isDoneWorking()),
     dispatch
-  };
+  }
 }
 
 const AppWithNavigationState = connect(mapStateToProps, mapDispatchToProps)(BaseApp);
