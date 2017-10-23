@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "Evas Imo",
+    "name": "Evas Niger",
     "icon": "./src/assets/images/logo.png",
     "version": "1.0.0",
-    "slug": "evas-imo",
+    "slug": "evas-niger",
     "sdkVersion": "21.0.0",
     "android": {
-      "package": "ng.evas.imo"
+      "package": "ng.evas.niger"
     },
     "orientation": "portrait",
     "primaryColor": "#336633"
