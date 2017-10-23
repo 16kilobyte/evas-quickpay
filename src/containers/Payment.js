@@ -32,14 +32,17 @@ class Payment extends Component {
     } else this.setState({ phoneError: false })
     if(!phoneError) {
       if(isReady) {
-        console.log(phone)
         isWorking()
         return paymentApiCharge({ phone: phone, amount: this.props.store.services.savedService.amount })
         .then(transaction => {
           console.log(transaction)
           transactionStarted(transaction)
           isDoneWorking()
-          console.log('handlePayment->transaction', transaction)
+          Toast.show({
+            text: 'Charge pending validation. Please enter the OTP sent to you',
+            type: 'success',
+            duration: 5000
+          })
         }).catch(error => {
           transactionFail(error)
           isDoneWorking()
@@ -50,6 +53,11 @@ class Payment extends Component {
           })
         })
       } else {
+        Toast.show({
+          text: 'App is busy',
+          type: 'warning',
+          duration: 3000
+        })
         console.log('handlePayment', 'App is busy')
       }
     }
@@ -93,6 +101,11 @@ class Payment extends Component {
           })
         })
       } else {
+        Toast.show({
+          text: 'App is busy',
+          type: 'warning',
+          duration: 3000
+        })
         console.log('handleConfirmation', 'App is busy')
       }
     }
